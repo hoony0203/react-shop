@@ -7,6 +7,7 @@ let Listing = (props) => {
   return (
     <Col
       md={4}
+      className="shoeList"
       onClick={() => {
         navigate("/detail/" + props.pIndex);
       }}>
