@@ -1,3 +1,5 @@
+let url = "https://codingapple1.github.io/shop/shoes";
+
 let data = [
   {
     id: 0,
@@ -22,4 +24,4 @@ let data = [
   },
 ];
 
-export default data;
+export { url, data };

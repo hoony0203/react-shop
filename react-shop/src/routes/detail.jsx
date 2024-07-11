@@ -2,26 +2,53 @@ import { Button, Container, Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
-import data from "../data.js";
+import * as data from "../data.js";
 import { useMemo } from "react";
 
 let Detail = (props) => {
   let { id } = useParams();
-  let [index, setIndex] = useState(data[id].id);
+  let [index, setIndex] = useState(data.data[id].id);
   let [count, setCount] = useState(0);
   let [isAlert, setIsalert] = useState(true);
+  let [input, setInput] = useState("");
+  let [validResult, setValidResult] = useState("");
 
   useEffect(() => {
+    let a = "";
     if (isAlert) {
-      setTimeout(() => {
+      a = setTimeout(() => {
         setIsalert(!isAlert);
       }, 2000);
     }
+    return () => {
+      clearTimeout(a);
+    };
+  }, []);
+
+  let valid = useEffect(() => {
+    const regex = new RegExp(/^\d+$/);
+    if (input != "") {
+      let result = regex.test(input);
+      setValidResult(result);
+    }
+    return () => {
+      input = "";
+      validResult = "";
+    };
   });
 
   return (
     <>
       {isAlert ? <Alert /> : null}
+
+      {input == "" ? null : !validResult ? <Validnotify /> : null}
+      <input
+        type="text"
+        onChange={(e) => {
+          setInput(e.target.value);
+          valid;
+        }}
+      />
       {count}
       <button
         onClick={() => {
@@ -52,6 +79,10 @@ let Alert = () => {
       <p>2초 이내 구매시 할인</p>
     </div>
   );
+};
+
+let Validnotify = () => {
+  return <div>숫자만 입력하세요</div>;
 };
 
 export default Detail;

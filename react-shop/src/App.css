@@ -18,6 +18,15 @@ body {
   background-repeat: no-repeat;
 }
 
+.home,
 .shoeList {
   cursor: pointer;
+}
+
+.home {
+  transition: all 0.3s;
+}
+
+.home:hover {
+  font-style: italic;
 }
