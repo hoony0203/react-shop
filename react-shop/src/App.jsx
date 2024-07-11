@@ -1,9 +1,13 @@
 import { useState } from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
 import { Container, Nav, Navbar, Row, Col } from "react-bootstrap";
-import bg from "../public/img/img.jpg";
+import { Routes, Route, Link, useNavigate, Outlet } from "react-router-dom";
+
+import "bootstrap/dist/css/bootstrap.min.css";
+import bg from "/img/img.jpg";
 import data from "./data.js";
-import Listing from "./list.jsx";
+import Detail from "./routes/detail.jsx";
+import About from "./routes/about.jsx";
+import Listing from "./components/list.jsx";
 
 import "./App.css";
 
@@ -19,6 +23,17 @@ function App() {
     return newArray;
   };
 
+  let sortList = () => {
+    let newArray = [...shoes];
+    newArray.sort(function (a, b) {
+      return a.title < b.title ? -1 : a.title > b.title ? 1 : 0;
+    });
+    //console.log(newArray);
+    return setShoes(newArray);
+  };
+
+  let navigate = useNavigate();
+
   return (
     <>
       <div className="App">
@@ -26,23 +41,62 @@ function App() {
           <Container>
             <Navbar.Brand href="#home">피자헛</Navbar.Brand>
             <Nav className="me-auto">
-              <Nav.Link href="#home">홈</Nav.Link>
-              <Nav.Link href="#menu">메뉴</Nav.Link>
+              {/* <Nav.Link href="/">홈</Nav.Link> */}
+              <Nav.Link
+                onClick={() => {
+                  navigate("/");
+                }}>
+                홈
+              </Nav.Link>
+              {/* <Nav.Link href="/detail">상세</Nav.Link> */}
+              <Nav.Link
+                onClick={() => {
+                  navigate("/detail");
+                }}>
+                상세
+              </Nav.Link>
+              <Nav.Link
+                onClick={() => {
+                  navigate("/about");
+                }}>
+                About
+              </Nav.Link>
               <Nav.Link href="#pricing">장바구니</Nav.Link>
             </Nav>
           </Container>
         </Navbar>
 
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <>
+                <div
+                  className="main-bg"
+                  style={{ backgroundImage: "url(" + bg + ")" }}></div>
+
+                <button
+                  onClick={() => {
+                    sortList();
+                  }}>
+                  상품정렬
+                </button>
+                <Container>
+                  <Row>{shoeListing()}</Row>
+                </Container>
+              </>
+            }
+          />
+          <Route path="/detail/:id" element={<Detail pShoes={shoes} />} />
+          <Route path="/about" element={<About></About>}>
+            <Route path="member" element={<div>member</div>} />
+            <Route path="location" element={<About></About>} />
+          </Route>
+          <Route path="*" element={<div>없는 페이지 404</div>} />
+        </Routes>
+
         <br />
-
-        <div
-          className="main-bg"
-          style={{ backgroundImage: "url(" + bg + ")" }}></div>
       </div>
-
-      <Container>
-        <Row>{shoeListing()}</Row>
-      </Container>
     </>
   );
 }
