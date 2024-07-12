@@ -8,29 +8,20 @@ import * as data from "./data.js";
 import Detail from "./routes/detail.jsx";
 import About from "./routes/about.jsx";
 import Listing from "./components/list.jsx";
+import { Load, Loading } from "./components/loading.jsx";
 import axios from "axios";
 
 import "./App.css";
 
 function App() {
   let [shoes, setShoes] = useState(data.data);
-  let [newShoes, setnewShoes] = useState([]);
-  let [isNew, setisNew] = useState(false);
-  // let [index, setIndex] = useState("");
+  let [loadCount, setloadCount] = useState(0);
+  let [isLoading, setisLoading] = useState(false);
 
   let shoeListing = () => {
-    //console.log(rest);
     let newArray = [];
     for (let i = 0; i < shoes.length; i++) {
       newArray.push(<Listing pShoes={shoes} pIndex={i}></Listing>);
-    }
-    return newArray;
-  };
-
-  let newShoesListing = () => {
-    let newArray = [];
-    for (let i = 0; i < newShoes.length; i++) {
-      newArray.push(<Listing pShoes={newShoes} pIndex={i}></Listing>);
     }
     return newArray;
   };
@@ -40,7 +31,6 @@ function App() {
     newArray.sort(function (a, b) {
       return a.title < b.title ? -1 : a.title > b.title ? 1 : 0;
     });
-    //console.log(newArray);
     return setShoes(newArray);
   };
 
@@ -72,7 +62,6 @@ function App() {
                 }}>
                 About
               </Nav.Link>
-              <Nav.Link href="#pricing">장바구니</Nav.Link>
             </Nav>
           </Container>
         </Navbar>
@@ -92,28 +81,48 @@ function App() {
                   }}>
                   상품정렬
                 </button>
+
+                {isLoading ? <Loading></Loading> : null}
+
                 <Container>
                   <Row>{shoeListing()}</Row>
                 </Container>
                 <button
                   onClick={() => {
-                    axios
-                      .get("https://codingapple1.github.io/shop/data2.json")
-                      .then((result) => {
-                        let newArray = [...result.data];
-                        setnewShoes(newArray);
-                        console.log(newShoes);
-                        setisNew(!isNew);
-                      })
-                      .catch((err) => {
-                        console.log(err.message);
-                      });
+                    if (loadCount == 0) {
+                      setisLoading(!isLoading);
+                      axios
+                        .get("https://codingapple1.github.io/shop/data2.json")
+                        .then((result) => {
+                          let copy = [...shoes, ...result.data];
+                          setShoes(copy);
+                          setloadCount(loadCount + 1);
+                          setisLoading(isLoading);
+                        })
+                        .catch((err) => {
+                          setisLoading(isLoading);
+                          console.log(err.message);
+                        });
+                    } else if (loadCount == 1) {
+                      setisLoading(!isLoading);
+                      axios
+                        .get("https://codingapple1.github.io/shop/data3.json")
+                        .then((result) => {
+                          let copy = [...shoes, ...result.data];
+                          setShoes(copy);
+                          setloadCount(loadCount + 1);
+                          setisLoading(isLoading);
+                        })
+                        .catch((err) => {
+                          setisLoading(isLoading);
+                          console.log(err.message);
+                        });
+                    } else {
+                      alert("상품이 더 없습니다.");
+                    }
                   }}>
                   상품 추가로드
                 </button>
-                <Container>
-                  <Row>{isNew ? newShoesListing(newShoes) : null}</Row>
-                </Container>
               </>
             }
           />

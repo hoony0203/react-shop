@@ -30,3 +30,28 @@ body {
 .home:hover {
   font-style: italic;
 }
+
+.tabUI {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  /* margin: 0 auto; */
+}
+
+.tabUI ul {
+  display: flex;
+  list-style: none;
+}
+
+.tabUI li {
+  border: 1px solid black;
+  margin: 20px 20px 0px 20px;
+}
+
+.tabUI li:hover {
+  background-color: red;
+}
+
+.tabUI li:focus {
+  background-color: blue;
+}
