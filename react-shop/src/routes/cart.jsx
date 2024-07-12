@@ -2,7 +2,7 @@ import { Table } from "react-bootstrap";
 
 import { useDispatch, useSelector } from "react-redux";
 import { changeName, plusAge } from "../store/userSlice.js";
-import { plusCount } from "../store.js";
+import { plusCount } from "../store/cartSlice.js";
 
 export { Cart };
 
