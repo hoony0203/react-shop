@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, current } from "@reduxjs/toolkit";
 
 let cart = createSlice({
   name: "cart",
@@ -8,13 +8,22 @@ let cart = createSlice({
   ],
   reducers: {
     plusCount(state, a) {
-      let { id, i } = a.payload;
+      let { id } = a.payload;
       let result = state.find((item) => item.id == id);
-      let { count } = result;
       result.count += 1;
+    },
+    detailOrder(state, a) {
+      let { id } = a.payload;
+      let result = state.find((item) => item.id == id);
+      if (result == undefined) {
+        state.push(a.payload);
+      } else {
+        result.count += 1;
+      }
+      console.log(current(state));
     },
   },
 });
 
-export let { plusCount } = cart.actions;
+export let { plusCount, cartCheck, detailOrder } = cart.actions;
 export default cart;

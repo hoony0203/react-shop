@@ -2,9 +2,12 @@ import { Button, Container, Row, Col } from "react-bootstrap";
 import { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
+import { useDispatch, useSelector } from "react-redux";
 
 import * as data from "../data.js";
 import { useMemo } from "react";
+
+import { cartCheck, detailOrder, plusCount } from "../store/cartSlice.js";
 
 // import { Context1 } from "../App.jsx";
 
@@ -20,6 +23,9 @@ import { useMemo } from "react";
 // `;
 
 let Detail = ({ pShoes }) => {
+  let dispatch = useDispatch();
+  let cart = useSelector((state) => state.cart);
+
   // let { stock, shoes } = useContext(Context1);
 
   let { id } = useParams();
@@ -126,7 +132,19 @@ let Detail = ({ pShoes }) => {
               <h4>{pShoes[index].title}</h4>
               <p>{pShoes[index].content}</p>
               <p>{pShoes[index].price}</p>
-              <Button className="btn btn-danger">주문하기</Button>
+              <Button
+                className=""
+                onClick={(e) => {
+                  let product = pShoes[index];
+                  let obj = {
+                    id: product.id,
+                    name: product.title,
+                    count: (product.count = 1),
+                  };
+                  dispatch(detailOrder(obj));
+                }}>
+                주문하기
+              </Button>
             </Col>
           </Row>
         </Container>
