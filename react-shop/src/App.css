@@ -55,3 +55,12 @@ body {
 .tabUI li:focus {
   background-color: blue;
 }
+
+.start {
+  opacity: 0;
+}
+
+.end {
+  opacity: 1;
+  transition: all 1s;
+}

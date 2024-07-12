@@ -1,15 +1,20 @@
-import { useState } from "react";
+import { useState, useEffect, createContext } from "react";
 import { Container, Nav, Navbar, Row, Col } from "react-bootstrap";
 import { Routes, Route, Link, useNavigate, Outlet } from "react-router-dom";
 
 import "bootstrap/dist/css/bootstrap.min.css";
+import axios from "axios";
+
 import bg from "/img/img.jpg";
 import * as data from "./data.js";
 import Detail from "./routes/detail.jsx";
 import About from "./routes/about.jsx";
 import Listing from "./components/list.jsx";
 import { Load, Loading } from "./components/loading.jsx";
-import axios from "axios";
+import { Cart } from "./routes/cart.jsx";
+// export { Context1 };
+
+// let Context1 = createContext();
 
 import "./App.css";
 
@@ -17,6 +22,8 @@ function App() {
   let [shoes, setShoes] = useState(data.data);
   let [loadCount, setloadCount] = useState(0);
   let [isLoading, setisLoading] = useState(false);
+
+  //let [stock, setStock] = useState([10, 11, 12]);
 
   let shoeListing = () => {
     let newArray = [];
@@ -61,6 +68,12 @@ function App() {
                   navigate("/about");
                 }}>
                 About
+              </Nav.Link>
+              <Nav.Link
+                onClick={() => {
+                  navigate("/cart");
+                }}>
+                Cart
               </Nav.Link>
             </Nav>
           </Container>
@@ -126,7 +139,17 @@ function App() {
               </>
             }
           />
-          <Route path="/detail/:id" element={<Detail pShoes={shoes} />} />
+          <Route
+            path="/detail/:id"
+            element={
+              // <Context1.Provider value={{ stock, shoes }}>
+              <Detail pShoes={shoes} />
+              // </Context1.Provider>
+            }
+          />
+
+          <Route path="/cart" element={<Cart />} />
+
           <Route path="/about" element={<About></About>}>
             <Route path="member" element={<div>member</div>} />
             <Route path="location" element={<About></About>} />
