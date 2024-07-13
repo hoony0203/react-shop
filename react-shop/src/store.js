@@ -7,6 +7,19 @@ let stock = createSlice({
   initialState: [10, 11, 12],
 });
 
+let recentStore = createSlice({
+  name: "recent",
+  initialState: [""],
+  reducers: {
+    setRecent(state, a) {
+      state = a.payload;
+    },
+  },
+});
+
+export { recentStore };
+export let setRecent = recentStore.actions;
+
 export default configureStore({
   reducer: {
     user: user.reducer,

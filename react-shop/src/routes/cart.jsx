@@ -60,11 +60,9 @@ let Product = () => {
           <button
             className={cart[i].id}
             onClick={(e) => {
-              let id = parseInt(e.target.className);
-              let a = { id: id, i: i };
-              // console.log(id);
+              let id = parseInt(cart[i].id);
               //dispatch(changeName());
-              dispatch(plusCount(a));
+              dispatch(plusCount(id));
             }}>
             +
           </button>

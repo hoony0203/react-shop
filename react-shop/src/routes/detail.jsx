@@ -7,7 +7,8 @@ import { useDispatch, useSelector } from "react-redux";
 import * as data from "../data.js";
 import { useMemo } from "react";
 
-import { cartCheck, detailOrder, plusCount } from "../store/cartSlice.js";
+import { detailOrder, plusCount } from "../store/cartSlice.js";
+import { setRecent } from "../store.js";
 
 // import { Context1 } from "../App.jsx";
 
@@ -22,19 +23,36 @@ import { cartCheck, detailOrder, plusCount } from "../store/cartSlice.js";
 //   padding: 20px;
 // `;
 
-let Detail = ({ pShoes }) => {
+let Detail = ({ pShoes, pRecentView }) => {
   let dispatch = useDispatch();
   let cart = useSelector((state) => state.cart);
-
+  let recentStore = useSelector((state) => state.recentStore);
   // let { stock, shoes } = useContext(Context1);
 
   let { id } = useParams();
-  let [index, setIndex] = useState(data.data[id].id);
+  //let [index, setIndex] = useState(data.data[id].id);
+  let [index, setIndex] = useState(pShoes[id].id);
+
+  let number = parseInt(id) + 1;
+  let [recentView, setRecentView] = useState(pRecentView);
   // let [tab, setTab] = useState([
   //   { id: 0, status: true },
   //   { id: 1, status: false },
   //   { id: 2, status: false },
   // ]);
+
+  useEffect(() => {
+    setRecentView(localStorage.getItem("recent"));
+    let recent = localStorage.getItem("recent");
+    let array = JSON.parse(recent);
+    console.log(array);
+    array.push(id);
+    let set = new Set(array);
+    console.log(set);
+    localStorage.removeItem("recent");
+    localStorage.setItem("recent", JSON.stringify([...set]));
+    // dispatch(setRecent(set));
+  });
 
   let [tab, setTab] = useState(0);
   let [fade2, setFade2] = useState("");
@@ -126,7 +144,7 @@ let Detail = ({ pShoes }) => {
         <Container>
           <Row>
             <Col md={6}>
-              <img src={pShoes[index].url} alt="" />
+              <img src={data.url + number + ".jpg"} alt="" />
             </Col>
             <Col md={6} mt={4}>
               <h4>{pShoes[index].title}</h4>
